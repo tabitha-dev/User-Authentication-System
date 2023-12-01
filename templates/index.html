@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div id="flash-messages">
+        {% for message in messages %}
+          <p class="flash-message">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+{% endwith %}
+
+<div class="container right-panel-active">
+    <!-- Sign Up -->
+    <div class="container__form container--signup">
+        <form action="{{ url_for('signup') }}" class="form" id="form1" method="post">
+            <h2 class="form__title">Sign Up</h2>
+            
+            <input type="text" placeholder="User" class="input" name="username" />
+            <input type="email" placeholder="Email" class="input" name="email" required />
+            <input type="password" placeholder="Password" class="input" name="password" required />
+            <button class="btn" type="submit">Sign Up</button>
+        </form>
+    </div>
+
+    <!-- Sign In -->
+    <div class="container__form container--signin">
+        <form action="{{ url_for('login') }}" class="form" id="form2" method="post">
+            <h2 class="form__title">Sign In</h2>
+            <input type="email" placeholder="Email" class="input" name="email" required />
+            <input type="password" placeholder="Password" class="input" name="password" required />
+            <a href="{{ url_for('forgot_password') }}">Forgot Password?</a>
+            <button class="btn" type="submit">Sign In</button>
+        </form>
+    </div>
+
+    <!-- Overlay -->
+    <div class="container__overlay">
+        <div class="overlay">
+            <div class="overlay__panel overlay--left">
+                <button class="btn" id="signIn">Sign In</button>
+            </div>
+            <div class="overlay__panel overlay--right">
+                <button class="btn" id="signUp">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const signInBtn = document.getElementById("signIn");
+    const signUpBtn = document.getElementById("signUp");
+    const container = document.querySelector(".container");
+
+    signInBtn.addEventListener("click", () => {
+        container.classList.remove("right-panel-active");
+    });
+
+    signUpBtn.addEventListener("click", () => {
+        container.classList.add("right-panel-active");
+    });
+
+    document.getElementById("form1").addEventListener("submit", (e) => {
+        const email = document.querySelector("#form1 input[name='email']").value;
+        const password = document.querySelector("#form1 input[name='password']").value;
+        if (!email || !password) {
+            e.preventDefault();
+            alert('Please fill in both email and password.');
+        } else if (password.length < 8) {
+            e.preventDefault();
+            alert('Password must be at least 8 characters long.');
+        }
+    });
+
+    document.getElementById("form2").addEventListener("submit", (e) => {
+        const email = document.querySelector("#form2 input[name='email']").value;
+        const password = document.querySelector("#form2 input[name='password']").value;
+        if (!email || !password) {
+            e.preventDefault();
+            alert('Please fill in both email and password.');
+        }
+    });
+
+    // Add this part for successful login redirection
+    const loginForm = document.getElementById("form2");
+    loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.querySelector("#form2 input[name='email']").value;
+        const password = document.querySelector("#form2 input[name='password']").value;
+
+        // Perform an AJAX request to check login credentials
+        const response = await fetch("{{ url_for('login') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `email=${email}&password=${password}`,
+        });
+
+        if (response.ok) {
+            // Redirect to the dashboard on successful login
+            window.location.href = "{{ url_for('dashboard') }}";
+        } else {
+            // Display an error message
+            alert('Invalid credentials');
+        }
+    });
+});
+</script>
+
+
+</body>
+</html>
