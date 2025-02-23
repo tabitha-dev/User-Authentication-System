@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.secret_key = 'your_very_secret_key'
-app.permanent_session_lifetime = timedelta(minutes=30)
+app.permanent_session_lifetime = timedelta(days=7)  # Extend session to 7 days
 
 # Configuration for Flask-Mail (email sending)
 
@@ -85,6 +85,7 @@ def login():
     login_attempts[email].append(now)
     
     if check_password_hash(users_db[email]['password_hash'], password):
+        session.permanent = True  # Make the session permanent
         session['email'] = email
         flash('Login successful!')
         return redirect(url_for('dashboard'))
@@ -148,7 +149,7 @@ def dashboard():
 def settings():
     if 'email' not in session:
         return redirect(url_for('home'))
-    return render_template('settings.html')
+    return render_template('settings.html', users_db=users_db)
 
 @app.route('/update_settings', methods=['POST'])
 def update_settings():
