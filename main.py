@@ -59,12 +59,6 @@ def login():
     user = users_db.get(email)
     if user and check_password_hash(user['password_hash'], password):
         session['email'] = email
-        users_db[email]['last_login'] = datetime.now()
-        users_db[email]['login_history'] = users_db[email].get('login_history', [])
-        users_db[email]['login_history'].append({
-            'timestamp': datetime.now(),
-            'ip': request.remote_addr
-        })
         flash('Login successful!')
         return redirect(url_for('dashboard'))
     flash('Invalid credentials')
@@ -147,16 +141,6 @@ def update_settings():
     
     flash('Settings updated successfully!')
     return redirect(url_for('settings'))
-
-@app.route('/delete_account', methods=['POST'])
-def delete_account():
-    if 'email' in session:
-        email = session['email']
-        if email in users_db:
-            del users_db[email]
-        session.pop('email', None)
-        flash('Your account has been deleted.')
-    return redirect(url_for('home'))
 
 @app.route('/logout')
 def logout():

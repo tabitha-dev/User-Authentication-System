@@ -173,12 +173,6 @@
             <p>Profile Views: 752</p>
             <p>Posts Shared: 56</p>
             <p>Interactions: 1,502</p>
-            <h3>Recent Logins</h3>
-            <ul>
-            {% for login in users_db[session['email']]['login_history'][-5:]|reverse %}
-                <li>{{ login.timestamp.strftime('%Y-%m-%d %H:%M:%S') }} from IP: {{ login.ip }}</li>
-            {% endfor %}
-            </ul>
         </div>
 
         <!-- Interactive Elements -->

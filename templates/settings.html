@@ -28,13 +28,6 @@
             </div>
             <button type="submit" class="btn">Update Settings</button>
         </form>
-        
-        <div class="danger-zone" style="margin-top: 40px; padding: 20px; border: 1px solid red; border-radius: var(--border-radius);">
-            <h3>Danger Zone</h3>
-            <form action="{{ url_for('delete_account') }}" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
-                <button type="submit" class="btn" style="background-color: #dc3545;">Delete Account</button>
-            </form>
-        </div>
     </div>
 </body>
 </html>
