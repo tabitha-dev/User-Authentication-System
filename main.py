@@ -58,11 +58,20 @@ def signup():
         flash('Email already exists.')
         return redirect(url_for('home'))
     users_db[email] = {
-    'password_hash': generate_password_hash(password, method='pbkdf2:sha256', salt_length=16),
-    'username': request.form['username'],
-    'joined_date': datetime.now(),
-    'last_login': datetime.now()
-}
+        'password_hash': generate_password_hash(password, method='pbkdf2:sha256', salt_length=16),
+        'username': request.form['username'],
+        'joined_date': datetime.now(),
+        'last_login': datetime.now(),
+        'stats': {
+            'visitors': 0,
+            'messages': 0,
+            'tasks': 0,
+            'events': 0,
+            'unread_messages': 0,
+            'due_tasks': 0,
+            'next_event_days': 0
+        }
+    }
     flash('Account created successfully!')
     return redirect(url_for('home'))
 

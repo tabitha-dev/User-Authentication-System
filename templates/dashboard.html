@@ -242,7 +242,7 @@
                     </div>
                     <h3>Total Visitors</h3>
                 </div>
-                <div class="number">1,240</div>
+                <div class="number">{{ users_db[session['email']]['stats']['visitors'] }}</div>
                 <p>+12% from last week</p>
             </div>
 
@@ -253,8 +253,8 @@
                     </div>
                     <h3>New Messages</h3>
                 </div>
-                <div class="number">35</div>
-                <p>5 unread messages</p>
+                <div class="number">{{ users_db[session['email']]['stats']['messages'] }}</div>
+                <p>{{ users_db[session['email']]['stats']['unread_messages'] }} unread messages</p>
             </div>
 
             <div class="card">
@@ -264,8 +264,8 @@
                     </div>
                     <h3>Tasks</h3>
                 </div>
-                <div class="number">8</div>
-                <p>3 due today</p>
+                <div class="number">{{ users_db[session['email']]['stats']['tasks'] }}</div>
+                <p>{{ users_db[session['email']]['stats']['due_tasks'] }} due today</p>
             </div>
 
             <div class="card">
@@ -275,8 +275,8 @@
                     </div>
                     <h3>Events</h3>
                 </div>
-                <div class="number">3</div>
-                <p>Next event in 2 days</p>
+                <div class="number">{{ users_db[session['email']]['stats']['events'] }}</div>
+                <p>Next event in {{ users_db[session['email']]['stats']['next_event_days'] }} days</p>
             </div>
         </div>
 
