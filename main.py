@@ -72,6 +72,10 @@ def login():
     email = request.form['email']
     password = request.form['password']
     
+    if email not in users_db:
+        flash('Account does not exist. Please sign up first.')
+        return redirect(url_for('home'))
+        
     # Check rate limiting
     now = datetime.now()
     login_attempts[email] = [t for t in login_attempts[email] if now - t < ATTEMPT_WINDOW]
@@ -79,8 +83,8 @@ def login():
         flash('Too many login attempts. Please try again later.')
         return redirect(url_for('home'))
     login_attempts[email].append(now)
-    user = users_db.get(email)
-    if user and check_password_hash(user['password_hash'], password):
+    
+    if check_password_hash(users_db[email]['password_hash'], password):
         session['email'] = email
         flash('Login successful!')
         return redirect(url_for('dashboard'))
