@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.secret_key = 'your_very_secret_key'
+app.permanent_session_lifetime = timedelta(minutes=30)
 
 # Configuration for Flask-Mail (email sending)
 app.config['MAIL_SERVER'] = 'smtp.example.com'  # Replace with your email server
@@ -41,7 +42,12 @@ def signup():
     if email in users_db:
         flash('Email already exists.')
         return redirect(url_for('home'))
-    users_db[email] = {'password_hash': generate_password_hash(password, method='pbkdf2:sha256', salt_length=16)}
+    users_db[email] = {
+    'password_hash': generate_password_hash(password, method='pbkdf2:sha256', salt_length=16),
+    'username': request.form['username'],
+    'joined_date': datetime.now(),
+    'last_login': datetime.now()
+}
     flash('Account created successfully!')
     return redirect(url_for('home'))
 
@@ -110,6 +116,31 @@ def dashboard():
         flash('Please login to view the dashboard.')
         return redirect(url_for('home'))
     return render_template('dashboard.html')
+
+@app.route('/settings')
+def settings():
+    if 'email' not in session:
+        return redirect(url_for('home'))
+    return render_template('settings.html')
+
+@app.route('/update_settings', methods=['POST'])
+def update_settings():
+    if 'email' not in session:
+        return redirect(url_for('home'))
+    
+    email = session['email']
+    if 'username' in request.form:
+        users_db[email]['username'] = request.form['username']
+    
+    if request.form.get('new_password'):
+        users_db[email]['password_hash'] = generate_password_hash(
+            request.form['new_password'],
+            method='pbkdf2:sha256',
+            salt_length=16
+        )
+    
+    flash('Settings updated successfully!')
+    return redirect(url_for('settings'))
 
 @app.route('/logout')
 def logout():
