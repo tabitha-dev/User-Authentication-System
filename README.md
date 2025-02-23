@@ -1,31 +1,46 @@
+# 🚀 User Authentication System
 
-# User Authentication System
+A **Flask-based** user authentication system with a sleek and secure **login, signup, and password reset** functionality. Designed to handle user sessions efficiently while ensuring a smooth authentication experience.
 
-A Flask-based user authentication system with features like login, signup, password reset, and dashboard.
+---
 
-## Features
-- User registration and login
-- Password reset functionality
-- User dashboard
-- Session management
-- Email notifications for password reset
+## 🔥 Features
 
-## Setup
-1. Clone the repository
-2. Install dependencies: `pip install -r requirements.txt`
-3. Configure email settings in `main.py`
-4. Run the application: `python main.py`
+✅ **User Registration & Login** – Secure authentication with session management.  
+✅ **Password Reset** – Users can reset passwords via email verification.  
+✅ **User Dashboard** – Personalized dashboard after login.  
+✅ **Session Management** – Keeps users logged in securely.  
+✅ **Email Notifications** – Password reset emails with token-based verification.  
 
-## Environment Variables
-Configure the following in your environment:
-- `MAIL_SERVER`
-- `MAIL_PORT`
-- `MAIL_USERNAME`
-- `MAIL_PASSWORD`
-- `SECRET_KEY`
+---
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first.
+## ⚙️ Setup
 
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
+Get started in just a few steps:
+
+### 1️⃣ Clone the repository  
+```bash
+git clone https://github.com/tabitha-dev/User-Authentication-System.git  
+cd User-Authentication-System
+```
+
+2️⃣ Install dependencies
+pip install -r requirements.txt
+
+3️⃣ Configure Email Settings
+Edit main.py to set up your email settings for password reset functionality.
+
+4️⃣ Run the application
+python main.py
+
+🔑 Environment Variables
+Ensure you configure the following in your environment:
+
+MAIL_SERVER=<your-mail-server>
+MAIL_PORT=<your-mail-port>
+MAIL_USERNAME=<your-email-username>
+MAIL_PASSWORD=<your-email-password>
+SECRET_KEY=<your-secret-key>
+
+🤝 Contributing
+Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to update.
