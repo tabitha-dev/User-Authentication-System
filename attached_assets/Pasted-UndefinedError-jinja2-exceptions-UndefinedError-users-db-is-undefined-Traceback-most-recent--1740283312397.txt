@@ -1,0 +1,31 @@
+UndefinedError
+jinja2.exceptions.UndefinedError: 'users_db' is undefined
+
+Traceback (most recent call last)
+File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/flask/app.py", line 1478, in __call__
+return self.wsgi_app(environ, start_response)
+File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/flask/app.py", line 1458, in wsgi_app
+response = self.handle_exception(e)
+File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/flask/app.py", line 1455, in wsgi_app
+response = self.full_dispatch_request()
+File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/flask/app.py", line 869, in full_dispatch_request
+rv = self.handle_user_exception(e)
+File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/flask/app.py", line 867, in full_dispatch_request
+rv = self.dispatch_request()
+File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/flask/app.py", line 852, in dispatch_request
+return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+File "/home/runner/workspace/main.py", line 141, in dashboard
+return render_template('dashboard.html')
+File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/flask/templating.py", line 152, in render_template
+return _render(app, template, context)
+File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/flask/templating.py", line 133, in _render
+rv = template.render(context)
+File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/jinja2/environment.py", line 1301, in render
+self.environment.handle_exception()
+File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/jinja2/environment.py", line 936, in handle_exception
+raise rewrite_traceback_stack(source=source)
+File "/home/runner/workspace/templates/dashboard.html", line 176, in top-level template code
+<h1>Welcome back, {{ users_db[session['email']]['username'] }}! 👋</h1>
+File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/jinja2/environment.py", line 466, in getitem
+return obj[argument]
+jinja2.exceptions.UndefinedError: 'users_db' is undefined
