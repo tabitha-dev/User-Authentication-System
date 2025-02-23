@@ -44,3 +44,19 @@ SECRET_KEY=<your-secret-key>
 
 🤝 Contributing
 Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to update.
+
+Screenshots
+
+![image](https://github.com/user-attachments/assets/1fbefbae-f6f7-456d-8c5c-f59c0eec24be)
+
+![image](https://github.com/user-attachments/assets/0c71aa2a-1036-462f-868f-db7058fa58d7)
+
+![image](https://github.com/user-attachments/assets/b20f489b-149f-45c2-b683-cb47efaf4259)
+
+![image](https://github.com/user-attachments/assets/3605d7c6-9387-4fa8-982a-1afefce7d216)
+
+![image](https://github.com/user-attachments/assets/669629a2-bd54-482a-a808-ca5a0a39e436)
+
+
+
+
