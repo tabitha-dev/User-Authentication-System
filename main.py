@@ -138,7 +138,7 @@ def dashboard():
     if 'email' not in session:
         flash('Please login to view the dashboard.')
         return redirect(url_for('home'))
-    return render_template('dashboard.html')
+    return render_template('dashboard.html', users_db=users_db)
 
 @app.route('/settings')
 def settings():
