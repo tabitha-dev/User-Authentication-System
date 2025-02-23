@@ -160,6 +160,65 @@
             padding: 15px;
             border-radius: var(--border-radius);
             text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.1);
+        }
+
+        .quick-actions {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-top: 20px;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            background: var(--secondary);
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        canvas {
+            margin: 20px 0;
+            max-height: 300px;
         }
     </style>
 </head>
@@ -248,26 +307,50 @@
 
         <div class="chart-container">
             <h2>Your Performance</h2>
+            <canvas id="performanceChart"></canvas>
             <div class="stats-grid">
                 <div class="stat-card">
                     <h3>Profile Views</h3>
-                    <div class="number">752</div>
+                    <div class="number" data-value="752">0</div>
                     <p>+15% this month</p>
                 </div>
                 <div class="stat-card">
                     <h3>Posts</h3>
-                    <div class="number">56</div>
+                    <div class="number" data-value="56">0</div>
                     <p>Last post 2 days ago</p>
                 </div>
                 <div class="stat-card">
                     <h3>Interactions</h3>
-                    <div class="number">1,502</div>
+                    <div class="number" data-value="1502">0</div>
                     <p>+23% this week</p>
                 </div>
             </div>
         </div>
+
+        <div class="chart-container">
+            <h2>Engagement Overview</h2>
+            <canvas id="engagementChart"></canvas>
+        </div>
+
+        <div class="quick-actions">
+            <h2>Quick Actions</h2>
+            <div class="action-buttons">
+                <button class="action-btn" onclick="showNotification('New post created!')">
+                    <i class="fas fa-plus"></i> New Post
+                </button>
+                <button class="action-btn" onclick="showNotification('Message sent!')">
+                    <i class="fas fa-envelope"></i> Send Message
+                </button>
+                <button class="action-btn" onclick="showNotification('Report generated!')">
+                    <i class="fas fa-file-alt"></i> Generate Report
+                </button>
+            </div>
+        </div>
     </div>
 
+    <div id="notification" class="notification"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Add simple animations when scrolling
         const cards = document.querySelectorAll('.card');
@@ -285,6 +368,85 @@
             card.style.transform = 'translateY(20px)';
             observer.observe(card);
         });
+
+        // Animate numbers
+        function animateNumbers() {
+            document.querySelectorAll('.number').forEach(number => {
+                const targetValue = parseInt(number.dataset.value);
+                let currentValue = 0;
+                const duration = 2000;
+                const increment = targetValue / (duration / 16);
+
+                const animate = () => {
+                    currentValue = Math.min(currentValue + increment, targetValue);
+                    number.textContent = Math.round(currentValue);
+                    if (currentValue < targetValue) {
+                        requestAnimationFrame(animate);
+                    }
+                };
+                animate();
+            });
+        }
+
+        // Performance Chart
+        const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(performanceCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Performance Score',
+                    data: [65, 75, 70, 80, 85, 90],
+                    borderColor: '#2563eb',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+
+        // Engagement Chart
+        const engagementCtx = document.getElementById('engagementChart').getContext('2d');
+        new Chart(engagementCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Likes', 'Comments', 'Shares'],
+                datasets: [{
+                    data: [300, 150, 100],
+                    backgroundColor: ['#2563eb', '#22c55e', '#f59e0b']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    }
+                }
+            }
+        });
+
+        // Notification system
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.opacity = '1';
+            notification.style.transform = 'translateY(0)';
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(20px)';
+            }, 3000);
+        }
+
+        // Initialize animations
+        animateNumbers();
     </script>
 </body>
 </html>
