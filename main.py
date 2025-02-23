@@ -10,6 +10,15 @@ app.secret_key = 'your_very_secret_key'
 app.permanent_session_lifetime = timedelta(minutes=30)
 
 # Configuration for Flask-Mail (email sending)
+
+from collections import defaultdict
+from datetime import datetime, timedelta
+
+# Rate limiting storage
+login_attempts = defaultdict(list)
+MAX_ATTEMPTS = 5
+ATTEMPT_WINDOW = timedelta(minutes=15)
+
 app.config['MAIL_SERVER'] = 'smtp.example.com'  # Replace with your email server
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = 'your_email@example.com'
@@ -39,6 +48,12 @@ def signup():
     if len(password) < 8:
         flash('Password must be at least 8 characters.')
         return redirect(url_for('home'))
+    if not any(c.isupper() for c in password):
+        flash('Password must contain at least one uppercase letter.')
+        return redirect(url_for('home'))
+    if not any(c.isdigit() for c in password):
+        flash('Password must contain at least one number.')
+        return redirect(url_for('home'))
     if email in users_db:
         flash('Email already exists.')
         return redirect(url_for('home'))
@@ -56,6 +71,14 @@ def signup():
 def login():
     email = request.form['email']
     password = request.form['password']
+    
+    # Check rate limiting
+    now = datetime.now()
+    login_attempts[email] = [t for t in login_attempts[email] if now - t < ATTEMPT_WINDOW]
+    if len(login_attempts[email]) >= MAX_ATTEMPTS:
+        flash('Too many login attempts. Please try again later.')
+        return redirect(url_for('home'))
+    login_attempts[email].append(now)
     user = users_db.get(email)
     if user and check_password_hash(user['password_hash'], password):
         session['email'] = email
